@@ -6,7 +6,6 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,16 +24,15 @@ public class Member {
     private String nickname;
 
     @Column(nullable = false, length = 30)
-    private String id;
+    private String login_id;
 
     @Column(nullable = false, length = 30)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDate date_of_birth;
 
-
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime create_time;
 
     @OneToMany(mappedBy = "member")
@@ -44,14 +42,19 @@ public class Member {
     List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Member(int member_id, String name, String nickname, String id, String password, LocalDate date_of_birth, LocalDateTime create_time) {
+    public Member(int member_id, String name, String nickname, String login_id, String password, LocalDate date_of_birth, LocalDateTime create_time) {
         this.member_id = member_id;
         this.name = name;
         this.nickname = nickname;
-        this.id = id;
+        this.login_id = login_id;
         this.password = password;
         this.date_of_birth = date_of_birth;
         this.create_time = create_time;
     }
+    @PrePersist
+    public void setCreate_time(){
+        this.create_time = LocalDateTime.now();
+    }
+
 
 }
