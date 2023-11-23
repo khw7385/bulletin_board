@@ -52,4 +52,16 @@ public class Post {
         this.member = member;
         member.getPosts().add(this);
     }
+
+    @PrePersist
+    void setCreate_timeAndUpdate_time(){
+        create_time = LocalDateTime.now();
+        update_time = create_time;
+    }
+
+    @PreUpdate
+    void setUpdate_time(){
+        update_time = LocalDateTime.now();
+    }
+
 }

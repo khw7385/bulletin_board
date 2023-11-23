@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -36,7 +37,7 @@ class PostRepositoryTest {
         memberBuilder = Member.builder()
                 .name("hyunwon")
                 .nickname("gimguy")
-                .id("khw7385")
+                .login_id("khw7385")
                 .password("1234")
                 .date_of_birth(LocalDate.of(1999, 1, 27))
                 .create_time(LocalDateTime.now().withNano(0));
@@ -66,5 +67,19 @@ class PostRepositoryTest {
         assertThat(post.getText()).isEqualTo(findPost.getText());
         assertThat(post.getMember().getMember_id()).isEqualTo(findPost.getMember().getMember_id());
         assertThat(post.getCreate_time()).isEqualTo(findPost.getCreate_time());
+
+
+    }
+
+    @Test
+    void 회원엔티티_POST필드_조회(){
+        Post post = postBuilder.build();
+        postRepository.save(post);
+
+        entityManager.clear();
+
+        Member member = memberRepository.findByLogin_id("khw7385").get();
+
+        System.out.println("member.getPosts() = " + member.getPosts());
     }
 }

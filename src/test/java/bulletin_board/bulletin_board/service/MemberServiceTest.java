@@ -1,13 +1,12 @@
 package bulletin_board.bulletin_board.service;
 
 import bulletin_board.bulletin_board.domain.Member;
-import bulletin_board.bulletin_board.dto.MemberLoginRequest;
-import bulletin_board.bulletin_board.dto.MemberSignUpRequest;
-import bulletin_board.bulletin_board.dto.MemberUpdateRequest;
+import bulletin_board.bulletin_board.dto.MemberLoginRequestDto;
+import bulletin_board.bulletin_board.dto.MemberSignUpRequestDto;
+import bulletin_board.bulletin_board.dto.MemberUpdateRequestDto;
 import bulletin_board.bulletin_board.exception.MemberException;
 import bulletin_board.bulletin_board.exception.MemberExceptionType;
 import bulletin_board.bulletin_board.repository.MemberRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,62 +48,62 @@ class MemberServiceTest {
 
     @Test
     void registerMemberPass(){
-        MemberSignUpRequest memberSignUpRequest = MemberSignUpRequest.builder()
+        MemberSignUpRequestDto memberSignUpRequestDto = MemberSignUpRequestDto.builder()
                 .login_id("qwer123")
                 .password("qwer123")
                 .name("spring")
                 .nickname("spring")
                 .date_of_birth(LocalDate.of(2023, 11, 16)).build();
 
-        memberService.signUp(memberSignUpRequest);
+        memberService.signUp(memberSignUpRequestDto);
     }
 
     @Test
     void registerMemberThrownByMemberExceptionTypeAsAlreadyExistIDAndNickname(){
-        MemberSignUpRequest memberSignUpRequest = MemberSignUpRequest.builder()
+        MemberSignUpRequestDto memberSignUpRequestDto = MemberSignUpRequestDto.builder()
                 .login_id("khw7385")
                 .password("qwer123")
                 .name("spring")
                 .nickname("zico")
                 .date_of_birth(LocalDate.of(2023, 11, 16)).build();
 
-        assertThatThrownBy(()-> memberService.signUp(memberSignUpRequest)).isInstanceOf(MemberException.class)
+        assertThatThrownBy(()-> memberService.signUp(memberSignUpRequestDto)).isInstanceOf(MemberException.class)
                 .hasFieldOrPropertyWithValue("exceptionType", MemberExceptionType.ALREADY_EXIST_ID_AND_NICKNAME);
     }
     @Test
     void 이미_로그인아이디가_존재하는_회원등록(){
-        MemberSignUpRequest memberSignUpRequest = MemberSignUpRequest.builder()
+        MemberSignUpRequestDto memberSignUpRequestDto = MemberSignUpRequestDto.builder()
                 .login_id("khw7385")
                 .password("qwer123")
                 .name("spring")
                 .nickname("spring")
                 .date_of_birth(LocalDate.of(2023, 11, 18)).build();
-        assertThatThrownBy(() -> memberService.signUp(memberSignUpRequest)).isInstanceOf(MemberException.class)
+        assertThatThrownBy(() -> memberService.signUp(memberSignUpRequestDto)).isInstanceOf(MemberException.class)
                 .hasFieldOrPropertyWithValue("exceptionType", MemberExceptionType.ALREADY_EXIST_ID);
     }
 
     @Test
     void 이미_닉네임이_존재하는_회원등록(){
-        MemberSignUpRequest memberSignUpRequest = MemberSignUpRequest.builder()
+        MemberSignUpRequestDto memberSignUpRequestDto = MemberSignUpRequestDto.builder()
                 .login_id("qwer123")
                 .password("qwer123")
                 .name("spring")
                 .nickname("gimguy")
                 .date_of_birth(LocalDate.of(2023, 11, 18)).build();
-        assertThatThrownBy(() -> memberService.signUp(memberSignUpRequest)).isInstanceOf(MemberException.class)
+        assertThatThrownBy(() -> memberService.signUp(memberSignUpRequestDto)).isInstanceOf(MemberException.class)
                 .hasFieldOrPropertyWithValue("exceptionType", MemberExceptionType.ALREADY_EXIST_NICKNAME);
     }
 
     @Test
     void 로그인성공(){
-        MemberLoginRequest loginRequest = MemberLoginRequest.builder()
+        MemberLoginRequestDto loginRequest = MemberLoginRequestDto.builder()
                 .id("khw7385")
                 .password("1234").build();
         assertDoesNotThrow(() -> memberService.login(loginRequest));
     }
     @Test
     void 로그인실패_존재하지_않는_아이디(){
-        MemberLoginRequest loginRequest = MemberLoginRequest.builder()
+        MemberLoginRequestDto loginRequest = MemberLoginRequestDto.builder()
                 .id("aaa123")
                 .password("1234").build();
         assertThatThrownBy(() -> memberService.login(loginRequest)).isInstanceOf(MemberException.class)
@@ -113,7 +112,7 @@ class MemberServiceTest {
 
     @Test
     void 로그인실패_아이디와_비밀번호_불일치(){
-        MemberLoginRequest loginRequest = MemberLoginRequest.builder()
+        MemberLoginRequestDto loginRequest = MemberLoginRequestDto.builder()
                 .id("khw7385")
                 .password("12345").build();
         assertThatThrownBy(() -> memberService.login(loginRequest)).isInstanceOf(MemberException.class)
@@ -122,7 +121,7 @@ class MemberServiceTest {
 
     @Test
     void 회원수정_성공(){
-        MemberUpdateRequest updateRequest = MemberUpdateRequest.builder()
+        MemberUpdateRequestDto updateRequest = MemberUpdateRequestDto.builder()
                 .login_id("khw73850")
                 .password("1234")
                 .name("hyunwon")
@@ -133,7 +132,7 @@ class MemberServiceTest {
 
     @Test
     void 회원수정_실패_존재하는_로그인_아이디와_닉네임(){
-        MemberUpdateRequest updateRequest = MemberUpdateRequest.builder()
+        MemberUpdateRequestDto updateRequest = MemberUpdateRequestDto.builder()
                 .login_id("zico1234")
                 .password("1234")
                 .name("hyunwon")
@@ -144,7 +143,7 @@ class MemberServiceTest {
 
     @Test
     void 회원수정_실패_존재하는_로그인_아이디(){
-        MemberUpdateRequest updateRequest = MemberUpdateRequest.builder()
+        MemberUpdateRequestDto updateRequest = MemberUpdateRequestDto.builder()
                 .login_id("zico1234")
                 .password("1234")
                 .name("hyunwon")
@@ -155,7 +154,7 @@ class MemberServiceTest {
 
     @Test
     void 회원수정_실패_존재하는_닉네임(){
-        MemberUpdateRequest updateRequest = MemberUpdateRequest.builder()
+        MemberUpdateRequestDto updateRequest = MemberUpdateRequestDto.builder()
                 .login_id("khw7385")
                 .password("1234")
                 .name("hyunwon")
