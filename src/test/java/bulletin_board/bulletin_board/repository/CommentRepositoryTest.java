@@ -59,14 +59,12 @@ public class CommentRepositoryTest {
         postRepository.save(post);
 
         commentBuilder = Comment.builder()
-                .comment_num(1)
-                .comment_level(1)
-                .comment_order(1)
                 .create_time(LocalDateTime.of(LocalDate.of(2023, 10, 31), LocalTime.of(12, 30)))
                 .update_time(LocalDateTime.now().withNano(0))
                 .post(post)
                 .member(member)
-                .text("댓글");
+                .text("댓글")
+                .parent_comment(0);
     }
 
     @Test
@@ -80,7 +78,6 @@ public class CommentRepositoryTest {
         Comment findComment = commentRepository.findById(comment.getComment_id()).get();
 
         assertThat(comment.getComment_id()).isEqualTo(findComment.getComment_id());
-        assertThat(comment.getComment_level()).isEqualTo(findComment.getComment_level());
         assertThat(comment.getText()).isEqualTo(findComment.getText());
         assertThat(comment.getMember().getMember_id()).isEqualTo(findComment.getMember().getMember_id());
         assertThat(comment.getPost().getPost_id()).isEqualTo(findComment.getPost().getPost_id());
